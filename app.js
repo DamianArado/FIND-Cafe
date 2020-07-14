@@ -19,7 +19,7 @@ const reviews = require('./routes/reviews');
 const app = express();
 
 //Connect to the database
-mongoose.connect('mongodb+srv://Humayun:garrysandhu%401@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://Humayun:garrysandhu@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true
