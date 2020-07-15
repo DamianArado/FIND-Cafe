@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {postRegister , postLogin , getLogout} = require('../controllers');
-const {errorHandler} = require('../middleware');
+const { postRegister, postLogin, getLogout } = require('../controllers');
+const { errorHandler } = require('../middleware')
 
-/* GET home page */
+/* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { title: 'FRIENDS CAFE - HOME' });
+  res.render('index', { title: 'F.R.I.E.N.D.S. CAfe - Home' });
 });
 
 /* GET /register */
@@ -14,7 +14,7 @@ router.get('/register', (req, res, next) => {
 });
 
 /* POST /register */
-router.post('/register',errorHandler(postRegister));
+router.post('/register', errorHandler(postRegister));
 
 /* GET /login */
 router.get('/login', (req, res, next) => {
@@ -22,10 +22,10 @@ router.get('/login', (req, res, next) => {
 });
 
 /* POST /login */
-router.post('/login',postLogin);
+router.post('/login', postLogin);
 
-/* GET /logout/ */
-router.get('/logout',getLogout);
+/* GET /logout */
+router.get('/logout', getLogout);
 
 /* GET /profile */
 router.get('/profile', (req, res, next) => {
