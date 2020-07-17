@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -21,7 +23,8 @@ const app = express();
 mongoose.connect('mongodb+srv://Humayun:garrysandhu@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify : false
 }).then(()=>{
 	console.log('Connected to database !');
 }).catch(err=>{
