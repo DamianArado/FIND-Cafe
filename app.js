@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const engine  = require('ejs-mate');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -11,16 +12,20 @@ const User = require('./models/user');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const seedPosts = require('./seeds');
 
-//Require routes
-const index   = require('./routes/index');
-const posts   = require('./routes/posts');
+//seedPosts();
+
+// require routes
+const index 	= require('./routes/index');
+const posts 	= require('./routes/posts');
 const reviews = require('./routes/reviews');
 
 const app = express();
 
+
 //Connect to the database
-mongoose.connect('mongodb+srv://Humayun:garrysandhu@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://Humayun:wordpass@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
@@ -39,10 +44,13 @@ db.once('open', () => {
   console.log('we\'re connected!');
 });
 
-
+//use ejs locals for all ejs templates
+app.engine('ejs',engine);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+// set public assets directory
+app.use(express.static('public'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -68,11 +76,32 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+//set local variables middleware
+app.use((req, res, next)=>{
+	
+	req.user = {
+		'_id' : '5f1a1115f3cac1027acb7998',
+		'username' : 'humayun'
+	}
+	res.locals.currentUser = req.user;
+	
+	//set default page title
+	res.locals.title = 'FRIENDS Cafe';
+	//set success and error flash message
+	res.locals.success = req.session.success || ' ';
+	delete req.session.success;
+	res.locals.error = req.session.error || '';
+	delete req.session.error;
+	
+	//continue onto next function in middleware
+	next(); 
+});
 
-//Mount Routes
+
+// Mount routes
 app.use('/', index);
-app.use('/posts',posts);
-app.use('/posts/:id/reviews',reviews);
+app.use('/posts', posts);
+app.use('/posts/:id/reviews', reviews);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -84,12 +113,15 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  //res.locals.message = err.message;
+  //res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  //res.status(err.status || 500);
+  //res.render('error');
+	console.log(err);
+	req.session.error = err.message;
+	res.redirect('back');
 });
 
 module.exports = app;
