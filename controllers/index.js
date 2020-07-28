@@ -1,6 +1,9 @@
 const User = require('../models/user');
 const Post = require('../models/post');
 const passport = require('passport');
+const util = require('util');
+const { cloudinary } = require('../cloudinary');
+const { deleteProfileImage } = require('../middleware');
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 
 module.exports = {
@@ -16,19 +19,27 @@ module.exports = {
 	// POST /register
 	async postRegister(req, res, next) {
 		try {
+			if (req.file) {
+				const { secure_url, public_id } = req.file;
+				req.body.image = {
+					secure_url,
+					public_id
+				}
+			}
 			const user = await User.register(new User(req.body), req.body.password);
 			req.login(user, function(err) {
 				if (err) return next(err);
-				req.session.success = `Welcome to FIND CAFÉ, ${user.username}!`;
+				req.session.success = `Welcome to Surf Shop, ${user.username}!`;
 				res.redirect('/');
 			});
 		} catch(err) {
+			deleteProfileImage(req);
 			const { username, email } = req.body;
 			let error = err.message;
 			if (error.includes('duplicate') && error.includes('index: email_1 dup key')) {
 				error = 'A user with the given email is already registered';
 			}
-			res.render('register', { title: 'Register', username, email, error })
+			res.render('register', { title: 'Register', username, email, error });
 		}
 	},
 	// GET /login
@@ -56,5 +67,29 @@ module.exports = {
 	getLogout(req, res, next) {
 	  req.logout();
 	  res.redirect('/');
+	},
+	// GET /profile
+	async getProfile(req, res, next) {
+	  const posts = await Post.find().where('author').equals(req.user._id).limit(10).exec();
+	  res.render('profile', { posts });
+	},
+	async updateProfile(req, res, next) {
+	const {
+		username,
+		email
+	} = req.body;
+	const { user } = res.locals;
+	if (username) user.username = username;
+	if (email) user.email = email;
+	if (req.file) {
+		if (user.image.public_id) await cloudinary.v2.uploader.destroy(user.image.public_id);
+		const { secure_url, public_id } = req.file;
+		user.image = { secure_url, public_id };
 	}
+	await user.save();
+	const login = util.promisify(req.login.bind(req));
+	await login(user);
+	req.session.success = 'Profile successfully updated!';
+	res.redirect('/profile');
+  }
 }
