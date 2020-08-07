@@ -7,12 +7,17 @@ const { cloudinary } = require('../cloudinary');
 module.exports = {
 	// Posts Index
 	async postIndex(req, res, next) {
-		let posts = await Post.paginate({}, {
+		const { dbQuery } = res.locals;
+		delete res.locals.dbQuery;
+		let posts = await Post.paginate(dbQuery, {
 			page: req.query.page || 1,
 			limit: 10,
 			sort: '-_id'
 		});
 		posts.page = Number(posts.page);
+		if (!posts.docs.length && res.locals.query) {
+			res.locals.error = 'No results match that query.';
+		}
 		res.render('posts/index', { 
 			posts, 
 			mapBoxToken, 
@@ -41,7 +46,7 @@ module.exports = {
 		req.body.post.geometry = response.body.features[0].geometry;
 		req.body.post.author = req.user._id;
 		let post = new Post(req.body.post);
-			post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}></a></strong><p>${post.location}></p><p>${post.description.substring(0, 20)}...</p>`;
+		post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}</a></strong><p>${post.location}</p><p>${post.description.substring(0, 20)}...</p>`;
 		post.save();
 		req.session.success = 'Post created successfully!';
 		res.redirect(`/posts/${post.id}`);
@@ -56,17 +61,18 @@ module.exports = {
 				model: 'User'
 			}
 		});
-		const floorRating = post.calculateAvgRating();
+		// const floorRating = post.calculateAvgRating();
+		const floorRating = post.avgRating;
 		res.render('posts/show', { post, mapBoxToken, floorRating });
 	},
 	// Posts Edit
 	postEdit(req, res, next) {
-	res.render('posts/edit');
+		res.render('posts/edit');
 	},
 	// Posts Update
 	async postUpdate(req, res, next) {
-	// pull post from res.locals
-	const { post } = res.locals;
+		// destructure post from res.locals
+		const { post } = res.locals;
 		// check if there's any images for deletion
 		if(req.body.deleteImages && req.body.deleteImages.length) {			
 			// assign deleteImages from req.body to its own variable
@@ -110,7 +116,7 @@ module.exports = {
 		post.title = req.body.post.title;
 		post.description = req.body.post.description;
 		post.price = req.body.post.price;
-		post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}></a></strong><p>${post.location}></p><p>${post.description.substring(0, 20)}...</p>`;
+		post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}</a></strong><p>${post.location}</p><p>${post.description.substring(0, 20)}...</p>`;
 		// save the updated post into the db
 		await post.save();
 		// redirect to show page
