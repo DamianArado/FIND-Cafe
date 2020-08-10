@@ -7,10 +7,12 @@ function geoFindMe(e) {
 	function success(position) {
 		const longitude = position.coords.longitude;
 		const latitude = position.coords.latitude;
-
-		status.textContent = '';
+		
+		// status.textContent = '';
+		status.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
 		locationInput.value = `[${longitude}, ${latitude}]`;
 	}
+
 
 	function error() {
 		status.textContent = 'Unable to retrieve your location';

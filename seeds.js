@@ -19,7 +19,12 @@ async function seedPosts() {
 			},
 			price: random1000,
 			avgRating: random5,
-			author: '5bb27cd1f986d278582aa58c'
+			author: '5bb27cd1f986d278582aa58c',
+			images : [
+				{
+					url : 'https://res.cloudinary.com/humayun7/image/upload/v1596835993/Cafe/jeremy-yap-jn-HaGWe4yw-unsplash_w0lrer.jpg'
+				}
+			]
 		}
 		let post = new Post(postData);
 		post.properties.description = `<strong><a href="/posts/${post._id}">${title}</a></strong><p>${post.location}</p><p>${description.substring(0, 20)}...</p>`;

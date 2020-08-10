@@ -1,13 +1,14 @@
 const User = require('../models/user');
 const Post = require('../models/post');
 const passport = require('passport');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
 const util = require('util');
 const { cloudinary } = require('../cloudinary');
 const { deleteProfileImage } = require('../middleware');
 const crypto = require('crypto');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const mapBoxToken = process.env.MAPBOX_TOKEN;
+
 
 module.exports = {
 	// GET /
@@ -28,7 +29,7 @@ module.exports = {
 				req.body.image = {
 					secure_url,
 					public_id
-				}
+				};
 			}
 			const user = await User.register(new User(req.body), req.body.password);
 			req.login(user, function(err) {
@@ -131,7 +132,7 @@ async putForgotPw(req, res, next) {
 },
 async getReset(req, res, next) {
   const { token } = req.params;
-	const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } })
+	const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
   if (!user) {
     req.session.error = 'Password reset token is invalid or has expired.';
     return res.redirect('/forgot-password');
