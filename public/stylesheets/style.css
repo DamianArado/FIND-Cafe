@@ -8,8 +8,10 @@
 
 #map { 
 	width: 100%; 
-	height: 500px; 
+	height: 500px;
+	margin-top:50px;
 }
+
 
 .mapboxgl-popup {
     max-width: 400px;

@@ -1,16 +1,17 @@
 <% layout('layouts/boilerplate') -%>
 
-<h1><img src="<%= currentUser.image.secure_url %>" alt="<%= currentUser.username %>'s profile image" class="profile-image"> <%= currentUser.username %>'s Profile</h1>
+<h1 style='margin:50px 20px;'><img src="<%= currentUser.image.secure_url %>" alt="<%= currentUser.username %>'s profile image" class="profile-image"> <%= currentUser.username %>'s Profile</h1>
 
-<p>Recent posts:</p>
+<div style='margin-left:20px;'>
+	<p>Recent posts:</p>
 
-<% posts.forEach(function(post) { %>
-<div>
-	<a href="/posts/<%= post.id %>"><%= post.title %></a>
-</div>
-<% }); %>
+	<% posts.forEach(function(post) { %>
+	<div>
+		<a href="/posts/<%= post.id %>"><%= post.title %></a>
+	</div>
+	<% }); %>
 
-<p>Update Info:</p>
+	<p>Update Info:</p>
 
 <form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
 	<div>
@@ -42,5 +43,7 @@
 
 	<input type="submit" id="update-profile">
 </form>
+
+</div>
 
 <script src="/javascripts/profile.js"></script>

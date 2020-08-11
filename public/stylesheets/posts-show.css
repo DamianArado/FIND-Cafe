@@ -1,8 +1,7 @@
-
-
 #map {
 		width: 350px;
 		height: 250px;
+		margin-top:50px;
 	}
 
 .marker {
@@ -28,4 +27,5 @@
 
 .clear-rating{
 	display : block;
+	white-space: pre-line; 
 }

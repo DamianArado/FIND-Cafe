@@ -20,7 +20,7 @@
 </div>
 <div>
 	<% post.images.forEach(function(image) { %>
-	<img src="<%= image.url %>" alt="Surf board image" width="200px">
+	<img src="<%= image.url %>" alt="Food item image" width="200px">
 	<% }); %>
 </div>
 <div id='map'></div>
@@ -59,7 +59,7 @@
 	<input type="submit">
 </form>
 <% } else { %>
-<h2><a href="/login?returnTo=true">Create a Review</a></h2>
+<h3><a href="/login?returnTo=true">Create a Review by clicking here.</a></h3>
 <% } %>
 
 <h3>Reviews</h3>
@@ -75,7 +75,7 @@
 		<button class="toggle-edit-form">Edit</button>
 		<form action="/posts/<%= post.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
 			<textarea name="review[body]" required><%= review.body %></textarea>
-			<fieldset class="starability-basic">
+			<fieldset class="starability-heart">
 			  <legend>Rating:</legend>
 			  <button class="clear-rating" type="button">Clear Rating</button>
 			  <input type="radio" id="edit-rate0" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
