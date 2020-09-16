@@ -7,4 +7,4 @@ A forgot password / password reset option is also there along with a profile pag
 Currently, this web application works on the data of the United States of America.
 
 ## Tools and Technologies used 
- Express, MongoDB
+ Express, MongoDB, EJS, HTML, CSS
