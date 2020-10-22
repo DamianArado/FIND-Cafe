@@ -15,12 +15,13 @@ const methodOverride = require('method-override');
 //const seedPosts = require('./seeds');
 //seedPosts();
 
+const app = express();
+
 // require routes
 const index 	= require('./routes/index');
 const posts 	= require('./routes/posts');
 const reviews = require('./routes/reviews');
 
-const app = express();
 
 
 //Connect to the database
@@ -43,6 +44,7 @@ db.once('open', () => {
   console.log('we\'re connected!');
 });
 
+
 //use ejs locals for all ejs templates
 app.engine('ejs',engine);
 // view engine setup
@@ -60,8 +62,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
+
 //Add moment to every view
 app.locals.moment = require('moment');
+
 
 // Configure Passport and Sessions
 app.use(session({
