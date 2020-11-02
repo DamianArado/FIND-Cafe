@@ -8,3 +8,6 @@ Currently, this web application works on the data of the United States of Americ
 
 ## Tools and Technologies used 
  Express, MongoDB, EJS, HTML, CSS
+
+## Test Locally
+- `use npm install to install all the required dependencies`
