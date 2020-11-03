@@ -10,4 +10,5 @@ Currently, this web application works on the data of the United States of Americ
  Express, MongoDB, EJS, HTML, CSS
 
 ## Test Locally
-- `use npm install to install all the required dependencies`
+- Use `npm install` to install all the required dependencies
+- Go to localhost:3000 to see the app working
