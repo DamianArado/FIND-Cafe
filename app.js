@@ -25,7 +25,7 @@ const reviews = require('./routes/reviews');
 
 
 //Connect to the database
-mongoose.connect('mongodb+srv://Humayun:wordpass@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://Humayun:<password>@cluster0.qv68j.mongodb.net/cafe?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
